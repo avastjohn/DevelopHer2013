@@ -11,8 +11,8 @@ KEYBOARD = None
 PLAYER = None
 ######################
 
-GAME_WIDTH = 3
-GAME_HEIGHT = 3
+GAME_WIDTH = 7
+GAME_HEIGHT = 7
 
 #### Put class definitions here ####
 pass
