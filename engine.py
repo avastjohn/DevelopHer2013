@@ -42,7 +42,10 @@ def setup_images():
             "Girl": "Character Pink Girl.png",
             "Princess": "Character Princess Girl.png",
             "Dog": "dog.gif",
-            "Star": "Star.png"
+            "Star": "Star.png",
+            "Bone": "bone.gif",
+            "Poo": "poo.gif",
+            "Bag": "bag.gif"
             }
 
     for k,v in filenames.items():

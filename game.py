@@ -41,9 +41,10 @@ class Dog(GameElement):
             return (self.x, self.y)
         return None
 
-    def intereact(self, player):
-        pass
-        
+
+
+class Dog_house(GameElement):
+    SOLID = True
 
 class Item(GameElement):
     SOLID = False
@@ -54,12 +55,31 @@ class Item(GameElement):
         GAME_BOARD.del_el(self.x, self.y)
 
 class Bone(Item):
-    IMAGE = "Star"
+    IMAGE = "Bone"
     name = "bone"
 
+class Bag(Item):
+    IMAGE = "Bag"
+    name = "bag"
+
 class Poop(Item):
-    IMAGE = "BlueGem"
-    name = "poop"
+    IMAGE = "Poo"
+    name = "poo"
+    SOLID = True
+
+    def interact(self, player):
+        have_bag = False
+        for item in player.inventory:
+            if type(item) == Bag:
+                have_bag = True
+        if have_bag:
+            GAME_BOARD.draw_msg("You have used your poop bag to pick up this poo!")
+            GAME_BOARD.del_el(self.x, self.y)
+            player.inventory[Bag] = None
+        else:
+            GAME_BOARD.draw_msg("You need a poop bag to pick up this poo.")
+
+
 
 ####   End class definitions    ####
 def keyboard_handler():
@@ -97,10 +117,16 @@ def initialize():
     GAME_BOARD.register(doggie)
     GAME_BOARD.set_el(2,2, doggie)
 
-    bone = Bone()
-    GAME_BOARD.register(bone)
-    GAME_BOARD.set_el(2,0, bone)
+    bone_positions = [(5, 0), (6, 4), (1, 6)]
+    for pos in bone_positions:
+        bone = Bone()
+        GAME_BOARD.register(bone)
+        GAME_BOARD.set_el(pos[0],pos[1], bone)
 
     poop = Poop()
     GAME_BOARD.register(poop)
     GAME_BOARD.set_el(5,5, poop)
+
+    bag = Bag()
+    GAME_BOARD.register(bag)
+    GAME_BOARD.set_el(7,0, bag)
