@@ -45,7 +45,8 @@ def setup_images():
             "Star": "Star.png",
             "Bone": "bone.gif",
             "Poo": "poo.gif",
-            "Bag": "bag.gif"
+            "Bag": "bag.gif",
+            "DogHouse": "dog_house.gif"
             }
 
     for k,v in filenames.items():

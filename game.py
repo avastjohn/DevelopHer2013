@@ -45,6 +45,38 @@ class Dog(GameElement):
 
 class Dog_house(GameElement):
     SOLID = True
+    IMAGE = "DogHouse"
+    def interact(self, player):
+        have_bones = False
+        bones = 0
+        poo_picked_up = False
+        for item in player.inventory:
+            if type(item) == Bone:
+                bones += 1
+        if bones == 3:        
+            have_bones = True
+
+        for item in player.inventory:
+            if type(item) == Poop:
+                poo_picked_up = True
+        if have_bones:
+            if poo_picked_up:
+                GAME_BOARD.draw_msg("You have successfully stashed your dog bones in your dog house!")
+                #add stars and hearts as a congratulations
+                star_positions = [(5, 0), (6, 4), (1, 6)]
+                for pos in star_positions:
+                    star = Star()
+                    GAME_BOARD.register(star)
+                    GAME_BOARD.set_el(pos[0],pos[1], star)
+
+            else:
+                GAME_BOARD.draw_msg("Be a good doggie and clean up your poo before you stash your dog bones.")
+        else:
+            if poo_picked_up:
+                GAME_BOARD.draw_msg("Go collect your dog bones to stash in your dog house.")
+            else:
+                GAME_BOARD.draw_msg("Be a good doggie and clean up your poo. Then go collect your dog bones to stash in your dog house.")
+
 
 class Item(GameElement):
     SOLID = False
@@ -57,6 +89,11 @@ class Item(GameElement):
 class Bone(Item):
     IMAGE = "Bone"
     name = "bone"
+
+class Star(Item):
+    SOLID = True
+    name = "star"
+    IMAGE = "Star"
 
 class Bag(Item):
     IMAGE = "Bag"
@@ -76,6 +113,7 @@ class Poop(Item):
             GAME_BOARD.draw_msg("You have used your poop bag to pick up this poo!")
             GAME_BOARD.del_el(self.x, self.y)
             player.inventory[Bag] = None
+            player.inventory[self] = 1
         else:
             GAME_BOARD.draw_msg("You need a poop bag to pick up this poo.")
 
@@ -112,7 +150,13 @@ def keyboard_handler():
             GAME_BOARD.set_el(next_x, next_y, doggie)
 
 def initialize():
+    GAME_BOARD.draw_msg("Collect the bones and put them in your dog house! Don't forget to clean up after yourself.")
     global doggie
+    
+    doghouse = Dog_house()
+    GAME_BOARD.register(doghouse)
+    GAME_BOARD.set_el(0,1,doghouse)
+
     doggie = Dog()
     GAME_BOARD.register(doggie)
     GAME_BOARD.set_el(2,2, doggie)
@@ -123,10 +167,10 @@ def initialize():
         GAME_BOARD.register(bone)
         GAME_BOARD.set_el(pos[0],pos[1], bone)
 
-    poop = Poop()
-    GAME_BOARD.register(poop)
-    GAME_BOARD.set_el(5,5, poop)
-
     bag = Bag()
     GAME_BOARD.register(bag)
     GAME_BOARD.set_el(7,0, bag)
+
+    poop = Poop()
+    GAME_BOARD.register(poop)
+    GAME_BOARD.set_el(7,6, poop)
