@@ -15,8 +15,12 @@ GAME_WIDTH = 8
 GAME_HEIGHT = 7
 
 class Dog(GameElement):
-    IMAGE = "Heart"
+    IMAGE = "Dog"
     SOLID = True
+
+    def __init__(self):
+        GameElement.__init__(self)
+        self.inventory = {}
 
     def next_pos(self, direction):
         if direction == "up":
@@ -39,9 +43,23 @@ class Dog(GameElement):
 
     def intereact(self, player):
         pass
+        
 
+class Item(GameElement):
+    SOLID = False
 
+    def interact(self, player):
+        player.inventory[self] = player.inventory.get(self, 0 + 1)
+        GAME_BOARD.draw_msg("You just picked up a %s!"%self.name)
+        GAME_BOARD.del_el(self.x, self.y)
 
+class Bone(Item):
+    IMAGE = "Star"
+    name = "bone"
+
+class Poop(Item):
+    IMAGE = "BlueGem"
+    name = "poop"
 
 ####   End class definitions    ####
 def keyboard_handler():
@@ -79,3 +97,10 @@ def initialize():
     GAME_BOARD.register(doggie)
     GAME_BOARD.set_el(2,2, doggie)
 
+    bone = Bone()
+    GAME_BOARD.register(bone)
+    GAME_BOARD.set_el(2,0, bone)
+
+    poop = Poop()
+    GAME_BOARD.register(poop)
+    GAME_BOARD.set_el(5,5, poop)
